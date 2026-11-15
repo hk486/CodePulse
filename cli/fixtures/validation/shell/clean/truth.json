@@ -1,0 +1,7 @@
+{
+  "name": "shell-clean",
+  "language": "shell",
+  "languages": ["shell"],
+  "clean": true,
+  "expected": []
+}

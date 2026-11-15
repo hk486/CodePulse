@@ -1,0 +1,9 @@
+{
+  "name": "go-defects",
+  "language": "go",
+  "languages": ["go"],
+  "expected": [
+    { "ruleId": "GO-001", "file": "main.go", "note": "console output" },
+    { "ruleId": "GO-002", "file": "main.go", "note": "empty interface" }
+  ]
+}

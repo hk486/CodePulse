@@ -1,0 +1,7 @@
+{
+  "name": "java-clean",
+  "language": "java",
+  "languages": ["java"],
+  "clean": true,
+  "expected": []
+}

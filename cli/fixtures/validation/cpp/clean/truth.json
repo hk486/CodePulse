@@ -1,0 +1,7 @@
+{
+  "name": "cpp-clean",
+  "language": "cpp",
+  "languages": ["cpp"],
+  "clean": true,
+  "expected": []
+}

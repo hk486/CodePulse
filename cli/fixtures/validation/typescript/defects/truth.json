@@ -1,0 +1,13 @@
+{
+  "name": "typescript-defects",
+  "language": "typescript",
+  "languages": ["typescript"],
+  "expected": [
+    { "ruleId": "TS-001", "file": "api.ts", "note": "console statement" },
+    { "ruleId": "TS-002", "file": "api.ts", "note": "any type" },
+    { "ruleId": "TS-003", "file": "api.ts", "note": "loose equality" },
+    { "ruleId": "TS-012", "file": "api.ts", "note": "eval" },
+    { "ruleId": "TS-013", "file": "api.ts", "note": "setTimeout with a string" },
+    { "ruleId": "TS-017", "file": "api.ts", "note": "innerHTML" }
+  ]
+}

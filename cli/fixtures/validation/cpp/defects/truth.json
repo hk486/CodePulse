@@ -1,0 +1,9 @@
+{
+  "name": "cpp-defects",
+  "language": "cpp",
+  "languages": ["cpp"],
+  "expected": [
+    { "ruleId": "CPP-001", "file": "memory.c", "note": "printf" },
+    { "ruleId": "CPP-003", "file": "memory.c", "note": "strcpy" }
+  ]
+}

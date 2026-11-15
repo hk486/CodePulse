@@ -1,0 +1,666 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * The surfaces. Paper in the light theme, jet black in the dark one.
+ * The chrome carries no hue, so the only colour on screen is the severity
+ * of a finding.
+ */
+:root {
+  /**
+   * The colour scheme of the browser's own widgets.
+   *
+   * Without this the operating system paints dropdown menus, scrollbars,
+   * checkboxes and date pickers in its own light theme, whatever the page
+   * is doing. That is what makes a select menu open white on a dark page.
+   */
+  color-scheme: light;
+
+  --surface-page: 247 247 248;
+  --surface-card: 255 255 255;
+  --surface-raised: 244 244 245;
+  --surface-sunken: 241 241 243;
+
+  /* Three text roles and no more */
+  --ink: 23 23 23;
+  --ink-2: 82 82 91;
+  --ink-3: 113 113 122;
+
+  /* The severity ramp. The strongest colour on screen. */
+  --severity-critical: 220 38 38;
+  --severity-high: 194 65 12;
+  --severity-medium: 161 98 7;
+  --severity-low: 100 116 139;
+  --severity-positive: 22 163 74;
+
+  /**
+   * The interface accent. One hue, used for the things the user can act
+   * on: the current page, a focus ring, a link. Deep teal, because it sits
+   * with the severity ramp without competing with it.
+   */
+  --accent: 15 118 110;
+  --accent-soft: 13 148 136;
+
+  /* A project that is live and healthy */
+  --status-active: 22 163 74;
+
+  /* The scrim behind a modal. Dark in both themes. */
+  --scrim: 24 24 27;
+
+  /**
+   * Language identity.
+   *
+   * Six hues that live together without turning into a rainbow. A project
+   * keeps its colour wherever it appears: the tile, the chip, the bar in
+   * the chart. Anything unmapped falls back to the neutral ink.
+   */
+  --lang-1: 180 83 9;    /* amber  */
+  --lang-2: 109 40 217;  /* violet */
+  --lang-3: 13 148 136;  /* teal   */
+  --lang-4: 190 18 60;   /* rose   */
+  --lang-5: 77 124 15;   /* lime   */
+  --lang-6: 14 116 144;  /* cyan   */
+  --lang-0: 100 116 139; /* slate  */
+
+  /**
+   * Glass in the light theme.
+   *
+   * A frosted panel on paper is white on white, so it needs three things
+   * the dark theme does not: a translucent fill, a bright lit edge, and a
+   * shadow to carry the depth, because there are no darker surface steps
+   * to fall back on.
+   */
+  --glass-fill: 255 255 255 / 0.66;
+  --glass-fill-strong: 255 255 255 / 0.82;
+  --glass-fill-hover: 255 255 255 / 0.92;
+  --glass-edge: 15 23 42 / 0.07;
+  --glass-edge-strong: 15 23 42 / 0.11;
+  --glass-sheen: 255 255 255 / 0.95;
+  --glass-blur: 22px;
+  --glass-fill-inset: 255 255 255 / 0.82;
+  --glass-edge-inset: 15 23 42 / 0.06;
+  --glass-fill-pop: 255 255 255 / 0.985;
+  --glass-edge-pop: 255 255 255;
+  --glass-blur-pop: 32px;
+  --glass-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.95),
+    0 16px 34px -18px rgb(15 23 42 / 0.16),
+    0 3px 8px -4px rgb(15 23 42 / 0.06);
+  --glass-shadow-pop:
+    0 24px 60px -24px rgb(15 23 42 / 0.28),
+    0 4px 12px -6px rgb(15 23 42 / 0.12);
+
+  /**
+   * The atmosphere the glass refracts. On paper it is light through a
+   * window, so the fields are pastels and they sit a little higher.
+   */
+  --atmosphere:
+    radial-gradient(1000px 720px at 18% -6%, rgb(94 234 212 / 0.26), transparent 58%),
+    radial-gradient(900px 680px at 94% 8%, rgb(165 180 252 / 0.24), transparent 58%),
+    radial-gradient(1040px 780px at 64% 106%, rgb(253 224 150 / 0.22), transparent 58%),
+    radial-gradient(760px 700px at -6% 68%, rgb(251 207 232 / 0.18), transparent 58%);
+}
+
+.dark {
+  /* Jet black. Not blue-black, not grey, black. */
+  --surface-page: 8 8 10;
+  --surface-card: 16 16 19;
+  --surface-raised: 23 23 27;
+  --surface-sunken: 11 11 13;
+
+  --ink: 238 240 245;
+  --ink-2: 163 169 184;
+  --ink-3: 122 130 150;
+
+  --severity-critical: 255 99 105;
+  --severity-high: 255 159 69;
+  --severity-medium: 229 192 123;
+  --severity-low: 125 135 157;
+  --severity-positive: 76 195 138;
+
+  /* The interface accent, bright enough to read on black */
+  --accent: 45 212 191;
+  --accent-soft: 94 234 212;
+
+  /* A project that is live and healthy */
+  --status-active: 76 195 138;
+
+  /* The scrim behind a modal */
+  --scrim: 0 0 0;
+
+  /* Language identity, lifted for the dark theme */
+  --lang-1: 251 191 36;
+  --lang-2: 167 139 250;
+  --lang-3: 45 212 191;
+  --lang-4: 251 113 133;
+  --lang-5: 163 230 53;
+  --lang-6: 34 211 238;
+  --lang-0: 148 163 184;
+
+  /* The glass itself */
+  --glass-fill: 255 255 255 / 0.055;
+  --glass-fill-strong: 255 255 255 / 0.085;
+  --glass-fill-hover: 255 255 255 / 0.09;
+  --glass-edge: 255 255 255 / 0.11;
+  --glass-edge-strong: 255 255 255 / 0.14;
+  --glass-sheen: 255 255 255 / 0.10;
+  --glass-blur: 28px;
+  --glass-fill-inset: 255 255 255 / 0.075;
+  --glass-edge-inset: 255 255 255 / 0.13;
+  /*
+   * A panel that floats over the content, such as a list of
+   * notifications, has to dim what is behind it. A white wash over
+   * bright content leaves the text unreadable, so the dark glass is a
+   * dark material instead: the content behind is blurred and dimmed
+   * rather than shown through.
+   */
+  --glass-fill-pop: 16 16 20 / 0.985;
+  --glass-edge-pop: 255 255 255 / 0.14;
+  /* A panel over content is blurred harder, so what is behind it becomes
+     a shape rather than something you can read. */
+  --glass-blur-pop: 48px;
+  --glass-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.10),
+    0 18px 40px -24px rgb(0 0 0 / 0.7);
+  --glass-shadow-pop:
+    0 24px 60px -20px rgb(0 0 0 / 0.8);
+}
+
+/**
+ * The atmosphere behind the glass.
+ *
+ * Frosted panels only read as glass when there is something for them to
+ * refract, so the dark theme sits on a very quiet field of light. It is
+ * static, low contrast and never moves.
+ */
+body {
+  background-color: rgb(var(--surface-page));
+  background-image: var(--atmosphere);
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+.dark body {
+  background-color: rgb(var(--surface-page));
+  background-image:
+    radial-gradient(880px 640px at 26% 2%, rgb(45 212 191 / 0.10), transparent 58%),
+    radial-gradient(800px 580px at 88% 14%, rgb(129 140 248 / 0.09), transparent 60%),
+    radial-gradient(980px 720px at 56% 100%, rgb(251 191 36 / 0.055), transparent 60%),
+    radial-gradient(640px 620px at 0% 74%, rgb(244 114 182 / 0.05), transparent 60%);
+}
+
+/**
+ * A frosted panel.
+ *
+ * The fill is a low opacity white so the atmosphere shows through, the edge
+ * is a hairline, and the sheen on the top edge is what makes it read as
+ * glass rather than as a flat panel.
+ */
+.glass {
+  background-color: rgb(var(--glass-fill));
+  border: 1px solid rgb(var(--glass-edge));
+  box-shadow: var(--glass-shadow);
+}
+
+.glass-strong {
+  background-color: rgb(var(--glass-fill-strong));
+  border-color: rgb(var(--glass-edge-strong));
+}
+
+/**
+ * A panel that floats above the page: dropdowns, popovers, modals.
+ * It carries the deeper shadow because it is off the surface.
+ */
+.glass-pop {
+  background-color: rgb(var(--glass-fill-pop));
+  backdrop-filter: blur(var(--glass-blur-pop)) saturate(170%);
+  -webkit-backdrop-filter: blur(var(--glass-blur-pop)) saturate(170%);
+  border: 1px solid rgb(var(--glass-edge-pop));
+  box-shadow:
+    inset 0 1px 0 rgb(var(--glass-sheen)),
+    var(--glass-shadow-pop);
+}
+
+/**
+ * A panel that sits on top of another panel: a row inside a card, a chip,
+ * a segmented control. Brighter than its parent so the two layers read.
+ */
+.glass-inset {
+  background-color: rgb(var(--glass-fill-inset));
+  border: 1px solid rgb(var(--glass-edge-inset));
+  box-shadow: inset 0 1px 0 rgb(var(--glass-sheen));
+}
+
+/** A small chip of glass: badges, tags, facet pills. */
+.glass-chip {
+  background-color: rgb(var(--glass-fill-inset));
+  border: 1px solid rgb(var(--glass-edge-inset));
+  box-shadow: inset 0 1px 0 rgb(var(--glass-sheen));
+}
+
+/** A recessed well inside a panel: code blocks, empty states. */
+.glass-well {
+  background-color: rgb(var(--glass-fill-inset));
+  border: 1px solid rgb(var(--glass-edge-inset));
+}
+
+/** Hover and press states for the glass. */
+.glass-hover {
+  transition:
+    background-color 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.glass-hover:hover {
+  background-color: rgb(var(--glass-fill-hover));
+  border-color: rgb(var(--glass-edge-strong));
+}
+
+/* The font is loaded at the top of the file, before the other rules. */
+
+* {
+  @apply box-border;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply text-slate-900 antialiased selection:bg-primary-500 selection:text-white;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Typography =====
+   One scale for the whole product. Every page uses these, so the same
+   element is the same size wherever it appears.
+
+   display   30px  page titles
+   title     20px  section + card titles
+   body-lg   16px  main copy, inputs, buttons
+   body      14px  secondary copy, table cells, nav labels
+   caption   13px  captions and meta lines
+   micro     11px  badges and the smallest labels (never below this)
+*/
+.display { @apply text-[30px] font-bold leading-tight tracking-tight text-slate-900 dark:text-white; }
+.title { @apply text-[20px] font-semibold leading-snug tracking-tight text-slate-900 dark:text-white; }
+.body-lg { @apply text-[16px] leading-relaxed; }
+.body { @apply text-[14px] leading-relaxed; }
+.caption { @apply text-[13px] leading-relaxed; }
+.micro { @apply text-[11px] font-medium leading-tight tracking-wide; }
+
+h1, h2, h3, h4, h5, h6 {
+  @apply font-semibold text-slate-900 dark:text-white tracking-tight;
+}
+
+h1 { @apply text-[30px] leading-tight; }
+h2 { @apply text-[20px] leading-snug; }
+h3 { @apply text-[18px] leading-snug; }
+h4 { @apply text-[16px] leading-snug; }
+
+p {
+  @apply text-slate-600 dark:text-slate-300 leading-relaxed;
+}
+
+
+/* ===== Cards ===== */
+.card {
+  @apply rounded-[16px] p-6 text-ink transition-colors duration-150;
+  /* A frosted panel, in both themes. The fill, the edge and the shadow all
+     come from the theme, so one rule covers both.
+     There is no blur here on purpose: the card floats over the page
+     gradient, so there is nothing behind it to defocus, and every extra
+     backdrop layer shares one texture with the whole page. The glass
+     look comes from the fill, the edge and the shadow. */
+  background-color: rgb(var(--glass-fill));
+  border: 1px solid rgb(var(--glass-edge));
+  box-shadow: var(--glass-shadow);
+}
+
+.card-hover {
+  @apply relative overflow-hidden;
+}
+
+/**
+ * A card with no padding of its own.
+ *
+ * The panel inside it then reaches the edges, which is what a table or a
+ * row of tabs needs. The padding is set here rather than with a utility on
+ * the element, because a utility would lose to the one on `.card`.
+ */
+.card-flush {
+  @apply rounded-[16px] text-ink transition-colors duration-150 p-0 overflow-hidden;
+  background-color: rgb(var(--glass-fill));
+  border: 1px solid rgb(var(--glass-edge));
+  box-shadow: var(--glass-shadow);
+}
+
+
+
+/* ===== Buttons ===== */
+/**
+ * One easing curve and one set of durations for the whole product.
+ */
+.btn {
+  @apply inline-flex items-center justify-center rounded-[10px] px-5 py-2.5 text-[15px] font-medium transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-card disabled:opacity-50 disabled:pointer-events-none;
+}
+
+/**
+ * The primary action. Ink on light, off white on dark. Never a hue.
+ */
+.btn-primary {
+  @apply btn bg-primary-900 text-white hover:bg-primary-800 dark:bg-primary-50 dark:text-primary-900 dark:hover:bg-primary-100;
+}
+
+.btn-secondary {
+  @apply btn text-ink;
+  background-color: rgb(var(--glass-fill-inset));
+  border: 1px solid rgb(var(--glass-edge-inset));
+  box-shadow: inset 0 1px 0 rgb(var(--glass-sheen));
+}
+
+.btn-secondary:hover {
+  background-color: rgb(var(--glass-fill-hover));
+  border-color: rgb(var(--glass-edge-strong));
+}
+
+.btn-outline {
+  @apply btn border border-primary-300 dark:border-primary-700 bg-transparent text-ink-2 hover:bg-surface-raised hover:text-ink;
+}
+
+.btn-ghost {
+  @apply btn bg-transparent text-ink-2 hover:bg-surface-raised hover:text-ink;
+}
+
+.btn-success {
+  @apply btn bg-severity-positive text-white hover:opacity-90;
+}
+
+.btn-danger {
+  @apply btn bg-severity-critical text-white hover:opacity-90;
+}
+
+/**
+ * A button that is only an icon.
+ *
+ * The icon sits in a square box of a fixed size, so a row of them lines up
+ * with the text buttons beside it and with the icons in the navigation.
+ * The padding is reset here, because the text buttons carry a wide one.
+ */
+.btn-icon {
+  @apply w-10 h-10 grid place-items-center rounded-[10px] bg-transparent text-ink-2 hover:text-ink transition-colors duration-150 p-0;
+}
+
+.btn-icon:hover {
+  background-color: rgb(var(--glass-fill-hover));
+}
+
+/** The smaller box, for a row inside a card. */
+.btn-icon-sm {
+  @apply w-8 h-8 grid place-items-center rounded-[8px] bg-transparent text-ink-3 hover:text-ink transition-colors duration-150 p-0;
+}
+
+.btn-icon-sm:hover {
+  background-color: rgb(var(--glass-fill-hover));
+}
+
+/* ===== Badges ===== */
+.badge {
+  @apply inline-flex items-center rounded-[5px] px-2 py-0.5 text-[11px] font-medium border;
+}
+
+.badge-critical { @apply badge bg-severity-critical/10 text-severity-critical border-severity-critical/25; }
+.badge-high { @apply badge bg-severity-high/10 text-severity-high border-severity-high/25; }
+.badge-medium { @apply badge bg-severity-medium/10 text-severity-medium border-severity-medium/25; }
+.badge-low { @apply badge bg-severity-low/10 text-severity-low border-severity-low/25; }
+/**
+ * A scroll area that fades at the edge, so a row cut in half reads as
+ * more content below rather than as a clipping bug.
+ */
+.scroll-fade {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 20px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 20px), transparent);
+}
+
+.chip-active {
+  @apply inline-flex items-center rounded-[5px] px-2 py-0.5 text-[11px] font-medium;
+  background-color: rgb(var(--status-active) / 0.12);
+  border: 1px solid rgb(var(--status-active) / 0.3);
+  color: rgb(var(--status-active));
+}
+
+.badge-info {
+  @apply badge text-ink-2;
+  background-color: rgb(var(--glass-fill-inset));
+  border-color: rgb(var(--glass-edge-inset));
+  box-shadow: inset 0 1px 0 rgb(var(--glass-sheen));
+}
+
+/* ===== Form Elements ===== */
+.input-field {
+  @apply block w-full rounded-[10px] px-4 py-2.5 text-[15px] text-ink placeholder:text-ink-3 focus:outline-none focus:ring-2 transition-colors duration-150;
+  --tw-ring-color: rgb(var(--accent) / 0.35);
+  --tw-ring-offset-color: transparent;
+  background-color: rgb(var(--glass-fill));
+  border: 1px solid rgb(var(--glass-edge));
+  box-shadow: var(--glass-shadow);
+}
+
+.input-field:focus {
+  border-color: rgb(var(--glass-edge-strong));
+  box-shadow:
+    0 0 0 3px rgb(15 23 42 / 0.05),
+    var(--glass-shadow);
+}
+
+.dark .input-field:focus {
+  box-shadow:
+    0 0 0 3px rgb(255 255 255 / 0.07),
+    var(--glass-shadow);
+}
+
+textarea.input-field {
+  @apply min-h-[100px] resize-y;
+}
+
+select.input-field {
+  @appearance none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3e%3c/svg%3e");
+  background-size: 0.75rem 0.75rem;
+  background-position: right 1rem center;
+  background-repeat: no-repeat;
+  padding-right: 2.5rem;
+}
+
+.input-group {
+  @apply relative;
+}
+
+.input-icon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 text-slate-400;
+}
+
+.input-with-icon {
+  @apply pl-10;
+}
+
+.form-label {
+  @apply block text-[14px] font-medium text-ink-2 mb-1.5;
+}
+
+.form-hint {
+  @apply mt-1 text-[13px] text-slate-500 dark:text-slate-400;
+}
+
+.form-error {
+  @apply mt-1 text-[14px] text-rose-600 dark:text-rose-400;
+}
+
+/* ===== Alerts / Notifications ===== */
+.alert {
+  @apply rounded-xl border p-4 text-[14px] flex items-start gap-3;
+}
+
+.alert-info {
+  @apply alert text-ink-2;
+  background-color: rgb(var(--glass-fill-inset));
+  border-color: rgb(var(--glass-edge-inset));
+}
+.alert-success { @apply alert bg-severity-positive/10 border-severity-positive/25 text-severity-positive; }
+.alert-warning { @apply alert bg-severity-medium/10 border-severity-medium/25 text-severity-medium; }
+.alert-error { @apply alert bg-severity-critical/10 border-severity-critical/25 text-severity-critical; }
+
+/* ===== KPI Cards ===== */
+.kpi-card {
+  @apply rounded-[16px] p-5 text-ink transition-colors duration-150;
+  background-color: rgb(var(--glass-fill));
+  border: 1px solid rgb(var(--glass-edge));
+  box-shadow: var(--glass-shadow);
+}
+
+.kpi-value {
+  @apply text-[30px] font-medium leading-none mt-2 tabular-nums;
+}
+
+.kpi-label {
+  @apply text-[13px] font-normal text-ink-2;
+}
+
+.kpi-trend {
+  @apply text-[13px] font-normal mt-1.5 text-ink-3;
+}
+
+.kpi-trend-positive { @apply text-severity-positive; }
+.kpi-trend-negative { @apply text-severity-critical; }
+
+.kpi-icon {
+  @apply w-8 h-8 rounded-lg flex items-center justify-center text-ink-2 mb-3;
+}
+
+/* ===== Empty States ===== */
+.empty-state {
+  @apply flex flex-col items-center justify-center py-16 text-center;
+}
+
+.empty-state-icon {
+  @apply w-20 h-20 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 mb-4;
+}
+
+.empty-state-title {
+  @apply text-[18px] font-semibold text-slate-900 dark:text-white mb-2;
+}
+
+.empty-state-desc {
+  @apply text-slate-500 dark:text-slate-400 mb-8 max-w-sm;
+}
+
+/* ===== Tables ===== */
+.table-container {
+  @apply rounded-xl overflow-hidden;
+  background-color: rgb(var(--glass-fill-inset));
+  border: 1px solid rgb(var(--glass-edge-inset));
+  box-shadow: inset 0 1px 0 rgb(var(--glass-sheen));
+}
+
+.table {
+  @apply w-full text-left border-collapse;
+}
+
+.table th {
+  @apply px-6 py-3 text-[12px] font-medium text-ink-2;
+  background-color: rgb(var(--glass-fill-inset));
+  border-bottom: 1px solid rgb(var(--glass-edge-inset));
+}
+
+.table td {
+  @apply px-6 py-3 text-[14px] text-ink;
+  border-bottom: 1px solid rgb(var(--glass-edge-inset));
+}
+
+.table tr:last-child td {
+  @apply border-b-0;
+}
+
+.table tr:hover td {
+  background-color: rgb(var(--glass-fill-hover));
+}
+
+/* ===== Loading ===== */
+.skeleton {
+  @apply animate-pulse rounded-lg bg-slate-200 dark:bg-slate-800;
+}
+
+.skeleton-text {
+  @apply skeleton h-4 mb-2 w-3/4;
+}
+
+.skeleton-title {
+  @apply skeleton h-6 mb-4 w-full;
+}
+
+.skeleton-circle {
+  @apply skeleton w-10 h-10 rounded-full;
+}
+
+/* ===== Gradients ===== */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-accent {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 dark:bg-slate-700 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-slate-400 dark:bg-slate-600;
+}
+
+/* ===== Animations ===== */
+/**
+ * One entrance, one curve. Content rises once, everything else is static.
+ */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in,
+.slide-up {
+  animation: rise 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+
+
+.fade-in-delay-1 { animation-delay: 40ms; }
+.fade-in-delay-2 { animation-delay: 80ms; }
+.fade-in-delay-3 { animation-delay: 120ms; }
+.fade-in-delay-4 { animation-delay: 160ms; }
+
+/* ===== Dark mode text fixes ===== */
+.dark body {
+  @apply text-slate-200;
+}
+
+.dark p {
+  @apply text-slate-400;
+}

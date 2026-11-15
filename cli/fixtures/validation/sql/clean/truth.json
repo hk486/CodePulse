@@ -1,0 +1,7 @@
+{
+  "name": "sql-clean",
+  "language": "sql",
+  "languages": ["sql"],
+  "clean": true,
+  "expected": []
+}

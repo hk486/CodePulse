@@ -1,0 +1,13 @@
+{
+  "name": "java-defects",
+  "language": "java",
+  "languages": ["java"],
+  "expected": [
+    { "ruleId": "JAVA-001", "file": "ReportService.java", "note": "System.out" },
+    { "ruleId": "JAVA-006", "file": "ReportService.java", "note": "raw type" },
+    { "ruleId": "JAVA-007", "file": "ReportService.java", "note": "System.exit" },
+    { "ruleId": "JAVA-008", "file": "ReportService.java", "note": "Thread.sleep" },
+    { "ruleId": "JAVA-010", "file": "ReportService.java", "note": "equals without hashCode" },
+    { "ruleId": "JAVA-012", "file": "ReportService.java", "note": "ProcessBuilder" }
+  ]
+}

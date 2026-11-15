@@ -1,0 +1,10 @@
+{
+  "name": "shell-defects",
+  "language": "shell",
+  "languages": ["shell"],
+  "expected": [
+    { "ruleId": "SH-001", "file": "deploy.sh", "note": "eval" },
+    { "ruleId": "SH-006", "file": "deploy.sh", "note": "rm -rf with a variable" },
+    { "ruleId": "SH-008", "file": "deploy.sh", "note": "curl piped into sh" }
+  ]
+}

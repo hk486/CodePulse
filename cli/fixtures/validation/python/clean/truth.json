@@ -1,0 +1,7 @@
+{
+  "name": "python-clean",
+  "language": "python",
+  "languages": ["python"],
+  "clean": true,
+  "expected": []
+}

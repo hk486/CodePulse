@@ -1,0 +1,7 @@
+{
+  "name": "typescript-clean",
+  "language": "typescript",
+  "languages": ["typescript"],
+  "clean": true,
+  "expected": []
+}

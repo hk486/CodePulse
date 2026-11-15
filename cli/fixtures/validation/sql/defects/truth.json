@@ -1,0 +1,13 @@
+{
+  "name": "sql-defects",
+  "language": "sql",
+  "languages": ["sql"],
+  "expected": [
+    { "ruleId": "SQL-001", "file": "001_init.sql", "note": "SELECT *" },
+    { "ruleId": "SQL-002", "file": "001_init.sql", "note": "DELETE without WHERE" },
+    { "ruleId": "SQL-003", "file": "001_init.sql", "note": "UPDATE without WHERE" },
+    { "ruleId": "SQL-004", "file": "001_init.sql", "note": "DROP TABLE" },
+    { "ruleId": "SQL-006", "file": "001_init.sql", "note": "INSERT without columns" },
+    { "ruleId": "SQL-007", "file": "001_init.sql", "note": "no LIMIT" }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "python-defects",
+  "language": "python",
+  "languages": ["python"],
+  "expected": [
+    { "ruleId": "PY-001", "file": "app.py", "note": "bare except" },
+    { "ruleId": "PY-003", "file": "app.py", "note": "mutable default argument" },
+    { "ruleId": "PY-004", "file": "app.py", "note": "eval" },
+    { "ruleId": "PY-005", "file": "app.py", "note": "shell=True" },
+    { "ruleId": "PY-006", "file": "app.py", "note": "yaml.load" },
+    { "ruleId": "PY-011", "file": "app.py", "note": "== None" },
+    { "ruleId": "PY-014", "file": "app.py", "note": "print" }
+  ]
+}

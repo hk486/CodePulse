@@ -1,0 +1,7 @@
+{
+  "name": "go-clean",
+  "language": "go",
+  "languages": ["go"],
+  "clean": true,
+  "expected": []
+}
