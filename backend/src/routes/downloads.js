@@ -30,14 +30,15 @@ export function downloadRoutes(db, requireAuth) {
       const kind = String(req.body?.kind || '')
       const id = req.body?.id ? String(req.body.id) : null
 
-      const allowed = ['analysis', 'report', 'account']
+      // The findings of one analysis, as rows in a table.
+      const allowed = ['analysis', 'report', 'account', 'findings']
       if (!allowed.includes(kind)) {
         return res.status(400).json({ error: 'That file cannot be downloaded.' })
       }
 
       // Check the thing exists and belongs to the person asking, before a
       // link is handed out.
-      if (kind === 'analysis') {
+      if (kind === 'analysis' || kind === 'findings') {
         const analysis = await analysisService.getById(id, userId)
         if (!analysis) {
           return res.status(404).json({ error: 'That analysis was not found.' })
@@ -109,6 +110,27 @@ export function downloadRoutes(db, requireAuth) {
         )
       }
 
+      if (entry.kind === 'findings') {
+        const analysis = await analysisService.getById(entry.id, entry.userId)
+        if (!analysis) {
+          return res.status(404).json({ error: 'That analysis was not found.' })
+        }
+        const project = await projectService.getById(analysis.projectId, entry.userId)
+
+        const name = (project?.name || 'findings')
+          .replace(/[^a-z0-9]+/gi, '-')
+          .toLowerCase()
+        const csv = findingsToCsv(analysis.findings || [])
+
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8')
+        res.setHeader(
+          'Content-Disposition',
+          `attachment; filename="codepulse-${name}-${new Date().toISOString().slice(0, 10)}.csv"`
+        )
+        res.setHeader('Content-Length', String(Buffer.byteLength(csv)))
+        return res.send(csv)
+      }
+
       if (entry.kind === 'report') {
         const report = await reportService.getById(entry.id, entry.userId)
         if (!report) {
@@ -151,4 +173,55 @@ export function downloadRoutes(db, requireAuth) {
   })
 
   return router
+}
+
+/**
+ * The findings as rows in a table.
+ *
+ * One row per finding, so the numbers can be checked by hand. The snippet
+ * is left out, because a line of code with commas and quotes in it is the
+ * easiest way to make a table unreadable.
+ */
+function findingsToCsv(findings) {
+  const columns = [
+    'severity',
+    'category',
+    'confidence',
+    'validation',
+    'rule',
+    'title',
+    'file',
+    'line',
+    'tool'
+  ]
+
+  const escape = value => {
+    const text = String(value === null || value === undefined ? '' : value)
+    if (/[",\n\r]/.test(text)) {
+      return `"${text.replace(/"/g, '""')}"`
+    }
+    return text
+  }
+
+  const lines = [columns.join(',')]
+
+  for (const finding of findings) {
+    lines.push(
+      [
+        finding.severity,
+        finding.category,
+        finding.confidence,
+        finding.validation,
+        finding.ruleId,
+        finding.title,
+        finding.location?.filePath,
+        finding.location?.startLine,
+        finding.tool
+      ]
+        .map(escape)
+        .join(',')
+    )
+  }
+
+  return lines.join('\n') + '\n'
 }

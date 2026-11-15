@@ -68,7 +68,7 @@ export function PrintableReportModal({ endpoint, title, onClose }: PrintableRepo
     >
       <div className="glass-pop w-full max-w-4xl h-[85vh] rounded-2xl flex flex-col overflow-hidden">
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-[rgb(var(--glass-edge-inset))] flex-shrink-0">
-          <h2 className="text-sm font-semibold text-gray-900 dark:text-white">{title}</h2>
+          <h2 className="text-sm font-semibold text-ink">{title}</h2>
           <div className="flex items-center gap-2">
             <button onClick={handlePrint} disabled={!html} className="btn-primary inline-flex items-center gap-2 px-3 py-1.5 text-[13px]">
               <Printer className="w-3.5 h-3.5" />

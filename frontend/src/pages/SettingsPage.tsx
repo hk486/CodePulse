@@ -64,22 +64,25 @@ function ToggleSwitch({
           <Icon className="w-[18px] h-[18px]" />
         </div>
         <div className="min-w-0">
-          <div className="text-[14px] font-medium text-gray-900 dark:text-white">{label}</div>
+          <div className="text-[14px] font-medium text-ink">{label}</div>
           <div className="text-[13px] text-ink-2 mt-0.5">{description}</div>
         </div>
       </div>
       <button
+        type="button"
         onClick={onChange}
-        className={`relative inline-flex h-7 w-[52px] items-center rounded-full shrink-0 transition-colors duration-150 ${
-          checked ? 'bg-ink' : 'bg-primary-200 dark:bg-primary-800'
+        className={`relative inline-flex h-7 w-[52px] shrink-0 items-center rounded-full transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-card disabled:cursor-not-allowed disabled:opacity-50 ${
+          checked
+            ? 'bg-accent hover:brightness-95'
+            : 'bg-primary-300 hover:bg-primary-400 dark:bg-primary-700 dark:hover:bg-primary-600'
         }`}
         role="switch"
         aria-checked={checked}
         aria-label={label}
       >
         <span
-          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform duration-300 ${
-            checked ? 'translate-x-[28px]' : 'translate-x-1'
+          className={`inline-block h-5 w-5 transform rounded-full shadow-sm transition-transform duration-200 ease-out ${
+            checked ? 'translate-x-[28px] bg-white' : 'translate-x-1 bg-primary-50 dark:bg-primary-200'
           }`}
         />
       </button>
@@ -520,7 +523,7 @@ export function SettingsPage() {
                 <div className="flex items-start gap-3 mb-6">
                   <ShieldCheck className="w-5 h-5 text-ink-2 mt-0.5" />
                   <div>
-                    <div className="text-[14px] font-medium text-gray-900 dark:text-white">Password Requirements</div>
+                    <div className="text-[14px] font-medium text-ink">Password Requirements</div>
                     <div className="text-[13px] text-ink-2 mt-0.5">
                       Minimum 8 characters, including uppercase, lowercase, and numbers
                     </div>

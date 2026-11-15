@@ -14,7 +14,7 @@ import { API_URL, apiFetch, readError } from './apiClient'
  * minutes.
  */
 export async function downloadFromApi(
-  kind: 'analysis' | 'report' | 'account',
+  kind: 'analysis' | 'report' | 'account' | 'findings',
   id?: string
 ): Promise<void> {
   const response = await apiFetch('/downloads', {

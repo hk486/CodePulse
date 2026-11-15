@@ -10,6 +10,7 @@ import { SecretScanner } from "../analyzers/secrets";
 import { DependencyAnalyzer } from "../analyzers/dependencies";
 import { GenericSourceAnalyzer } from "../analyzers/generic";
 import { FRAMEWORK_ANALYZER } from "../analyzers/frameworks";
+import { CrossProjectAnalyzer } from "../analyzers/cross";
 import { AstAnalyzer } from "../analyzers/ast";
 
 export function analyzerKey(analyzer: LanguageAnalyzer): string {
@@ -30,6 +31,7 @@ export function buildAnalyzerCatalog(): LanguageAnalyzer[] {
     new GenericSourceAnalyzer(),
     FRAMEWORK_ANALYZER,
     new AstAnalyzer(),
+    new CrossProjectAnalyzer(),
   ];
 }
 

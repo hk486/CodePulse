@@ -154,7 +154,7 @@ export function SchedulesPanel() {
             required
             value={projectId}
             onChange={e => setProjectId(e.target.value)}
-            className="input-field h-11"
+            className={`input-field h-11 transition-colors ${projectId ? 'input-field-selected' : ''}`}
           >
             <option value="">Choose a project</option>
             {projects.map(project => (
@@ -188,7 +188,7 @@ export function SchedulesPanel() {
               id="schedule-unit"
               value={unit}
               onChange={e => setUnit(e.target.value)}
-              className="input-field h-11"
+              className="input-field h-11 input-field-selected"
             >
               {Object.keys(UNIT_LABELS).map(key => (
                 <option key={key} value={key}>
@@ -202,7 +202,7 @@ export function SchedulesPanel() {
         <button
           type="submit"
           disabled={saving || !projectId}
-          className="btn-primary"
+          className="btn-accent gap-2 px-5"
         >
           <Plus className="w-4 h-4" />
           {saving ? 'Adding...' : 'Add the schedule'}
@@ -226,7 +226,11 @@ export function SchedulesPanel() {
           {schedules.map(schedule => (
             <li
               key={schedule.id}
-              className="rounded-xl border border-[rgb(var(--glass-edge-inset))] p-4 flex items-start justify-between gap-3"
+              className={`rounded-xl border p-4 flex items-start justify-between gap-3 transition-colors ${
+                schedule.enabled
+                  ? 'border-accent/25 bg-accent/[0.04] dark:bg-accent/[0.08]'
+                  : 'border-[rgb(var(--glass-edge-inset))] bg-transparent'
+              }`}
             >
               <div className="min-w-0">
                 <p className="text-[14px] font-medium text-ink">
@@ -254,7 +258,7 @@ export function SchedulesPanel() {
               <div className="flex items-center gap-1 flex-shrink-0">
                 <button
                   onClick={() => void toggle(schedule)}
-                  className="btn-ghost p-2"
+                  className={`btn-ghost p-2 ${schedule.enabled ? 'btn-ghost-active' : 'text-ink-3'}`}
                   title={schedule.enabled ? 'Pause it' : 'Start it again'}
                 >
                   <Power className="w-3.5 h-3.5" />

@@ -1,0 +1,108 @@
+name: CodePulse
+
+# The build has to pass before anything is merged, and the checks have to
+# pass before the build does. The checks talk to a running instance, so
+# the stack is started with Docker Compose and the checks run against it.
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  cli:
+    name: The scanner
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: |
+            shared/package-lock.json
+            cli/package-lock.json
+
+      - name: Install the shared package
+        working-directory: shared
+        run: |
+          npm ci
+          npm run build
+
+      - name: Install the scanner
+        working-directory: cli
+        run: |
+          npm install file:../shared
+          npm ci
+          npm run build
+
+      - name: Type check
+        working-directory: cli
+        run: npx tsc --noEmit
+
+      - name: The scanner still finds what it should
+        run: |
+          set -euo pipefail
+          node cli/dist/cli.js scan test/fixtures/go --format json > /tmp/report.json
+          node -e "
+            const report = require('/tmp/report.json')
+            const findings = report.analysis.findings
+            if (!findings.length) throw new Error('the scanner found nothing at all')
+            const ids = new Set(findings.map(f => f.ruleId))
+            if (!ids.has('GO-001')) throw new Error('the known rule did not fire')
+            console.log('  the scanner found', findings.length, 'findings')
+          "
+
+      - name: The gate holds a build
+        run: |
+          set -euo pipefail
+          node cli/dist/cli.js scan test/fixtures/go --format json --output /tmp/baseline.json
+          # The same code against itself must pass.
+          node cli/dist/cli.js scan test/fixtures/go --format json --baseline /tmp/baseline.json
+          echo "  the gate let the same code through"
+
+  stack:
+    name: The whole stack
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: |
+            shared/package-lock.json
+            cli/package-lock.json
+            backend/package-lock.json
+            frontend/package-lock.json
+
+      - name: Build the images
+        run: docker compose build backend frontend
+
+      - name: Start the stack
+        run: |
+          docker compose up -d backend frontend
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:5000/api/health > /dev/null; then
+              echo "  the API is up"
+              break
+            fi
+            sleep 2
+          done
+          curl -sf http://localhost:5000/api/health
+
+      - name: Run the checks
+        run: bash test/run-all.sh
+
+      - name: What happened
+        if: always()
+        run: docker compose logs --tail 100 backend frontend
+
+      - name: Stop the stack
+        if: always()
+        run: docker compose down -v

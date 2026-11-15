@@ -32,7 +32,7 @@ export function Login() {
     }
   }
 
-  return <AuthLayout><AuthFormContainer title="Sign in" subtitle="Continue to your CodePulse workspace.">
+  return <AuthLayout><AuthFormContainer eyebrow="WELCOME BACK" title="Sign in" subtitle="Enter your details to access your workspace.">
     <form className="auth-form" onSubmit={handleSubmit} noValidate>
       <AuthInput id="login-email" label="Email address or username" icon={Mail} type="text" autoComplete="username"
         placeholder="you@company.com" value={identifier} onChange={e => setIdentifier(e.target.value)} disabled={loading} />

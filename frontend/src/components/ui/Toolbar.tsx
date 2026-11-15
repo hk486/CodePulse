@@ -34,14 +34,14 @@ export function SearchInput({
 }) {
   return (
     <div className="relative flex-1 min-w-0">
-      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-3 pointer-events-none" />
+      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-3 pointer-events-none" aria-hidden="true" />
       <input
         type="text"
         value={value}
         onChange={event => onChange(event.target.value)}
         placeholder={placeholder}
         aria-label={label}
-        className="input-field h-11 pl-10 w-full"
+        className="input-field h-11 !pl-11 w-full"
       />
     </div>
   )

@@ -1,17 +1,11 @@
 import type { ReactNode } from 'react'
-import { Activity, Moon, Sun } from 'lucide-react'
+import { ArrowUpRight, Check, Moon, ShieldCheck, Sun } from 'lucide-react'
 import { useTheme } from '../../contexts/ThemeContext'
+import { BrandLogo } from '../ui/BrandLogo'
 import '../../styles/auth.css'
 
 export function Logo({ className = '' }: { className?: string }) {
-  return (
-    <span className={`auth-logo ${className}`}>
-      <span className="auth-logo-mark">
-        <Activity size={18} strokeWidth={2.25} />
-      </span>
-      CodePulse
-    </span>
-  )
+  return <BrandLogo compact className={`auth-brand-logo ${className}`} />
 }
 
 export function ThemeToggle() {
@@ -39,10 +33,7 @@ interface Finding {
 }
 
 /**
- * The real product, rendered in code.
- *
- * These are actual findings from the scanner, so the page shows what the
- * tool produces rather than a picture of what it might produce.
+ * A small sample report to make the product experience concrete.
  */
 const FINDINGS: Finding[] = [
   {
@@ -85,21 +76,36 @@ export function AuthBrandPanel() {
       <div className="auth-brand-content">
         <div className="auth-eyebrow">Code analysis</div>
         <h1>
-          Every finding, with the file
-          <br />
-          <span>and the line it came from.</span>
+          See the whole codebase.
+          <span> Know what to improve.</span>
         </h1>
         <p>
-          Point CodePulse at a folder. It finds the languages, splits the
-          services and reports what is wrong with the code, in the order it
-          should be fixed.
+          CodePulse brings code quality, security, and engineering health into
+          one clear view—across every language and service in your project.
         </p>
 
-        {/* The product view. Not a picture of the product, the product. */}
+        <div className="auth-capabilities" aria-label="CodePulse capabilities">
+          <span><Check size={14} aria-hidden="true" /> Multi-language</span>
+          <span><Check size={14} aria-hidden="true" /> Service-aware</span>
+          <span><Check size={14} aria-hidden="true" /> Actionable findings</span>
+        </div>
+
         <div className="auth-preview">
           <div className="auth-preview-head">
-            <span className="auth-preview-title">Payment service</span>
-            <span className="auth-preview-meta">1,284 files · go, sql, ts</span>
+            <div className="auth-preview-project">
+              <span className="auth-preview-project-icon"><ShieldCheck size={16} /></span>
+              <span>
+                <span className="auth-preview-title">Sample analysis</span>
+                <span className="auth-preview-subtitle">A snapshot of your engineering health</span>
+              </span>
+            </div>
+            <span className="auth-preview-meta">EXAMPLE REPORT</span>
+          </div>
+          <div className="auth-preview-languages" aria-label="Example project technologies">
+            <span>TypeScript</span>
+            <span>Python</span>
+            <span>Go</span>
+            <span>Docker</span>
           </div>
           <div className="auth-preview-body">
             {FINDINGS.map(finding => (
@@ -117,15 +123,16 @@ export function AuthBrandPanel() {
             ))}
           </div>
           <div className="auth-preview-foot">
-            <span>4 findings</span>
-            <span>1 critical</span>
-            <span>reviewed in 6s</span>
+            <span>4 example findings</span>
+            <span>1 critical · 1 high · 2 medium</span>
+            <span className="auth-preview-link">Explore insights <ArrowUpRight size={14} /></span>
           </div>
         </div>
       </div>
 
       <div className="auth-brand-footer">
-        <span>Self hosted, deterministic, no source leaves the machine</span>
+        <span className="auth-footer-mark"><ShieldCheck size={15} aria-hidden="true" /></span>
+        <span>Built for better software engineering.</span>
       </div>
     </aside>
   )
@@ -134,15 +141,18 @@ export function AuthBrandPanel() {
 export function AuthFormContainer({
   title,
   subtitle,
+  eyebrow = 'CODEPULSE WORKSPACE',
   children,
 }: {
   title: string
   subtitle: string
+  eyebrow?: string
   children: ReactNode
 }) {
   return (
     <div className="auth-form-container">
       <div className="auth-form-heading">
+        <div className="auth-form-kicker">{eyebrow}</div>
         <h2>{title}</h2>
         <p>{subtitle}</p>
       </div>
@@ -168,7 +178,9 @@ export function AuthLayout({ children }: { children: ReactNode }) {
         </div>
         <div className="auth-main-content">{children}</div>
         <div className="auth-main-bottom">
-          <span>CodePulse</span>
+          <span className="codepulse-wordmark">
+            <span className="code">Code</span><span className="pulse">Pulse</span>
+          </span>
           <span>·</span>
           <span>Static analysis for whole repositories</span>
         </div>

@@ -41,7 +41,7 @@ export function Register() {
     }
   }
 
-  return <AuthLayout><AuthFormContainer title="Create your account" subtitle="Start understanding and improving your code quality.">
+  return <AuthLayout><AuthFormContainer eyebrow="GET STARTED" title="Create your account" subtitle="Set up your workspace and start understanding your codebase.">
     <form className="auth-form auth-form-register" onSubmit={handleSubmit} noValidate>
       <AuthInput id="register-name" label="Full name" icon={UserRound} autoComplete="name" placeholder="Alex Morgan"
         value={fullName} onChange={e => setFullName(e.target.value)} disabled={loading} />

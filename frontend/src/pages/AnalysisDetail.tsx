@@ -249,6 +249,18 @@ export function AnalysisDetail() {
   /**
    * Download the analysis as a JSON report.
    */
+  /**
+   * Download the findings as rows in a table, so the numbers can be
+   * checked by hand.
+   */
+  const handleExportCsv = async () => {
+    try {
+      await downloadFromApi('findings', analysis.id)
+    } catch (err) {
+      setShareNotice(err instanceof Error ? err.message : 'Could not export the findings.')
+    }
+  }
+
   const handleExportJson = async () => {
     try {
       await downloadFromApi('analysis', analysis.id)
@@ -371,6 +383,14 @@ export function AnalysisDetail() {
             >
               <Download className="w-4 h-4" />
               Export Report
+            </button>
+            <button
+              onClick={() => void handleExportCsv()}
+              className="btn-outline inline-flex items-center gap-2"
+              title="Download the findings as a CSV table"
+            >
+              <Download className="w-4 h-4" />
+              Findings CSV
             </button>
             <Link to="/projects" className="btn-secondary inline-flex items-center gap-2">
               <ArrowLeft className="w-4 h-4" />

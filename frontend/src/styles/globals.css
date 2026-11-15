@@ -105,6 +105,8 @@
 }
 
 .dark {
+  color-scheme: dark;
+
   /* Jet black. Not blue-black, not grey, black. */
   --surface-page: 8 8 10;
   --surface-card: 16 16 19;
@@ -308,6 +310,14 @@ p {
 }
 
 
+.codepulse-wordmark .code {
+  color: #64748B !important;
+}
+
+.codepulse-wordmark .pulse {
+  color: #059669 !important;
+}
+
 /* ===== Cards ===== */
 .card {
   @apply rounded-[16px] p-6 text-ink transition-colors duration-150;
@@ -357,6 +367,42 @@ p {
   @apply btn bg-primary-900 text-white hover:bg-primary-800 dark:bg-primary-50 dark:text-primary-900 dark:hover:bg-primary-100;
 }
 
+.btn-accent {
+  @apply btn text-white shadow-sm;
+  background-color: rgb(var(--accent));
+}
+
+.btn-accent:hover:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+.btn-accent:active:not(:disabled) {
+  filter: brightness(0.86);
+}
+
+.btn-accent:focus-visible {
+  --tw-ring-color: rgb(var(--accent) / 0.35);
+}
+
+.btn-accent:disabled {
+  opacity: 1;
+  cursor: not-allowed;
+  background-color: rgb(var(--surface-raised));
+  color: rgb(var(--ink-3));
+  box-shadow: none;
+  border: 1px solid rgb(var(--glass-edge-inset));
+}
+
+.dark .btn-accent {
+  color: rgb(var(--surface-page));
+}
+
+.dark .btn-accent:disabled {
+  background-color: rgb(var(--surface-raised));
+  color: rgb(var(--ink-3));
+  border-color: rgb(var(--glass-edge-inset));
+}
+
 .btn-secondary {
   @apply btn text-ink;
   background-color: rgb(var(--glass-fill-inset));
@@ -375,6 +421,15 @@ p {
 
 .btn-ghost {
   @apply btn bg-transparent text-ink-2 hover:bg-surface-raised hover:text-ink;
+}
+
+.btn-ghost-active {
+  color: rgb(var(--accent));
+}
+
+.btn-ghost-active:hover {
+  color: rgb(var(--accent));
+  filter: brightness(0.9);
 }
 
 .btn-success {
@@ -469,12 +524,41 @@ textarea.input-field {
 }
 
 select.input-field {
-  @appearance none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239ca3af'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3e%3c/svg%3e");
   background-size: 0.75rem 0.75rem;
   background-position: right 1rem center;
   background-repeat: no-repeat;
   padding-right: 2.5rem;
+}
+
+select.input-field option,
+select.input-field optgroup {
+  background-color: rgb(var(--surface-card));
+  color: rgb(var(--ink));
+}
+
+.dark select.input-field {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3e%3c/svg%3e");
+}
+
+input.input-field:disabled,
+select.input-field:disabled,
+textarea.input-field:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.input-field-selected {
+  border-color: rgb(var(--accent) / 0.45);
+  background-color: rgb(var(--accent) / 0.04);
+}
+
+.dark .input-field-selected {
+  border-color: rgb(var(--accent) / 0.4);
+  background-color: rgb(var(--accent) / 0.08);
 }
 
 .input-group {
@@ -633,6 +717,11 @@ select.input-field {
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-slate-400 dark:bg-slate-600;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: rgb(var(--accent));
 }
 
 /* ===== Animations ===== */

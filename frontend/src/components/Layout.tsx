@@ -12,13 +12,13 @@ import {
   BarChart3,
   ChevronDown,
   Grid,
-  Activity,
   FileText,
   PanelLeftClose,
   PanelLeftOpen,
 } from 'lucide-react'
 import { NotificationBell } from './NotificationBell'
 import { GlobalSearch } from './GlobalSearch'
+import { BrandLogo } from './ui/BrandLogo'
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate()
@@ -85,22 +85,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
         >
           <Link
             to="/"
-            className={`flex items-center gap-3 min-w-0 ${sidebarCollapsed ? 'justify-center' : ''}`}
+            className={`flex items-center min-w-0 ${sidebarCollapsed ? 'justify-center' : ''}`}
             title={sidebarCollapsed ? 'CodePulse' : undefined}
           >
-            <div className="w-9 h-9 rounded-[11px] bg-ink text-surface-card flex items-center justify-center flex-shrink-0">
-              <Activity size={20} strokeWidth={2} />
-            </div>
-            {!sidebarCollapsed && (
-              <div className="overflow-hidden min-w-0">
-                <h1 className="text-[18px] font-semibold text-ink tracking-tight leading-none">
-                  CodePulse
-                </h1>
-                <p className="text-[12px] text-ink-3 mt-1.5 leading-none">
-                  Engineering intelligence
-                </p>
-              </div>
-            )}
+            <BrandLogo showText={!sidebarCollapsed} tagline="Engineering intelligence" />
           </Link>
         </div>
 
@@ -186,18 +174,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
             aria-label="Navigation"
           >
             <div className="h-[76px] px-3 border-b border-[rgb(var(--glass-edge-inset))] flex items-center justify-between gap-2">
-              <Link to="/" className="flex items-center gap-3 min-w-0">
-                <div className="w-9 h-9 rounded-[11px] bg-ink text-surface-card flex items-center justify-center flex-shrink-0">
-                  <Activity size={20} strokeWidth={2} />
-                </div>
-                <div className="min-w-0">
-                  <h1 className="text-[18px] font-semibold text-ink leading-none">
-                    CodePulse
-                  </h1>
-                  <p className="text-[12px] text-ink-3 mt-1.5 leading-none">
-                    Engineering intelligence
-                  </p>
-                </div>
+              <Link to="/" className="flex items-center min-w-0">
+                <BrandLogo showText tagline="Engineering intelligence" />
               </Link>
               <button
                 onClick={() => setSidebarOpen(false)}
