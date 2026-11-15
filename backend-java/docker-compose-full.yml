@@ -1,0 +1,171 @@
+version: '3.8'
+
+services:
+  # Databases
+  mysql-auth:
+    image: mysql:8.0
+    container_name: codepulse-mysql-auth
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: codepulse_auth
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-auth-data:/var/lib/mysql
+    networks:
+      - codepulse-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  mysql-project:
+    image: mysql:8.0
+    container_name: codepulse-mysql-project
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: codepulse_project
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-project-data:/var/lib/mysql
+    networks:
+      - codepulse-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  mysql-analysis:
+    image: mysql:8.0
+    container_name: codepulse-mysql-analysis
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: codepulse_analysis
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql-analysis-data:/var/lib/mysql
+    networks:
+      - codepulse-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  mysql-notification:
+    image: mysql:8.0
+    container_name: codepulse-mysql-notification
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: codepulse_notification
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql-notification-data:/var/lib/mysql
+    networks:
+      - codepulse-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: codepulse-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - codepulse-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      timeout: 10s
+      retries: 5
+
+  # Spring Boot Services
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: codepulse-api-gateway
+    ports:
+      - "8000:8000"
+    depends_on:
+      - auth-service
+      - project-service
+      - analysis-service
+      - notification-service
+    networks:
+      - codepulse-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: codepulse-auth-service
+    ports:
+      - "8001:8001"
+    depends_on:
+      mysql-auth:
+        condition: service_healthy
+    networks:
+      - codepulse-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  project-service:
+    build:
+      context: ./project-service
+      dockerfile: Dockerfile
+    container_name: codepulse-project-service
+    ports:
+      - "8002:8002"
+    depends_on:
+      mysql-project:
+        condition: service_healthy
+    networks:
+      - codepulse-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  analysis-service:
+    build:
+      context: ./analysis-service
+      dockerfile: Dockerfile
+    container_name: codepulse-analysis-service
+    ports:
+      - "8003:8003"
+    depends_on:
+      mysql-analysis:
+        condition: service_healthy
+    networks:
+      - codepulse-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    container_name: codepulse-notification-service
+    ports:
+      - "8004:8004"
+    depends_on:
+      mysql-notification:
+        condition: service_healthy
+    networks:
+      - codepulse-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+volumes:
+  mysql-auth-data:
+  mysql-project-data:
+  mysql-analysis-data:
+  mysql-notification-data:
+
+networks:
+  codepulse-network:
+    driver: bridge

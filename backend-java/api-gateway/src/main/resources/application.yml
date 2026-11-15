@@ -1,0 +1,74 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - http://localhost:3000
+              - http://localhost:3001
+              - http://localhost:3002
+              - http://localhost:3003
+              - http://localhost:5173
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - Content-Type
+              - Authorization
+            exposedHeaders:
+              - Authorization
+            maxAge: 3600
+            allowCredentials: false
+      routes:
+        - id: auth-service
+          uri: http://localhost:8001
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - RewritePath=/api/auth/(?<segment>.*), /auth/$\{segment}
+
+        - id: project-service
+          uri: http://localhost:8002
+          predicates:
+            - Path=/api/projects,/api/projects/**
+          filters:
+            - JwtAuthenticationFilter
+            - RewritePath=/api/projects(?<segment>/?.*), /projects$\{segment}
+
+        - id: analysis-service
+          uri: http://localhost:8003
+          predicates:
+            - Path=/api/analysis,/api/analysis/**
+          filters:
+            - JwtAuthenticationFilter
+            - RewritePath=/api/analysis(?<segment>/?.*), /analysis$\{segment}
+
+        - id: notification-service
+          uri: http://localhost:8004
+          predicates:
+            - Path=/api/notifications,/api/notifications/**
+          filters:
+            - JwtAuthenticationFilter
+            - RewritePath=/api/notifications(?<segment>/?.*), /notifications$\{segment}
+      
+      httpclient:
+        connect-timeout: 60000
+        response-timeout: 60000ms
+
+server:
+  port: 8000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    enabled: false
+
+jwt:
+  secret: ${JWT_SECRET:codepulse-secret-key-change-in-production}

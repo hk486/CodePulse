@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  # MySQL Database for Auth Service
+  mysql-auth:
+    image: mysql:8.0
+    container_name: codepulse-mysql-auth
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: codepulse_auth
+    ports:
+      - "13306:3306"
+    volumes:
+      - mysql-auth-data:/var/lib/mysql
+    networks:
+      - codepulse-network
+
+  # MySQL Database for Project Service
+  mysql-project:
+    image: mysql:8.0
+    container_name: codepulse-mysql-project
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: codepulse_project
+    ports:
+      - "13307:3306"
+    volumes:
+      - mysql-project-data:/var/lib/mysql
+    networks:
+      - codepulse-network
+
+  # MySQL Database for Analysis Service
+  mysql-analysis:
+    image: mysql:8.0
+    container_name: codepulse-mysql-analysis
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: codepulse_analysis
+    ports:
+      - "13308:3306"
+    volumes:
+      - mysql-analysis-data:/var/lib/mysql
+    networks:
+      - codepulse-network
+
+  # MySQL Database for Notification Service
+  mysql-notification:
+    image: mysql:8.0
+    container_name: codepulse-mysql-notification
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: codepulse_notification
+    ports:
+      - "13309:3306"
+    volumes:
+      - mysql-notification-data:/var/lib/mysql
+    networks:
+      - codepulse-network
+
+  # Redis for caching and session management
+  redis:
+    image: redis:7-alpine
+    container_name: codepulse-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - codepulse-network
+
+  # Eureka Service Registry (optional - can run as Spring Boot service instead)
+  # eureka:
+  #   image: springcloud/eureka:latest
+  #   container_name: codepulse-eureka
+  #   ports:
+  #     - "8761:8761"
+  #   environment:
+  #     - EUREKA_HOSTNAME=eureka
+  #   networks:
+  #     - codepulse-network
+
+volumes:
+  mysql-auth-data:
+  mysql-project-data:
+  mysql-analysis-data:
+  mysql-notification-data:
+
+networks:
+  codepulse-network:
+    driver: bridge
