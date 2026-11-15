@@ -17,6 +17,9 @@ COPY frontend/ ./frontend/
 
 # Install the local shared package first (it is not published on npm),
 # then install the frontend dependencies and build.
+# VITE_API_URL is read at build time; /api uses same-origin nginx proxy.
+ARG VITE_API_URL=/api
+ENV VITE_API_URL=$VITE_API_URL
 RUN cd frontend \
     && npm install file:../shared \
     && npm install \
