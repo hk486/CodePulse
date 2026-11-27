@@ -106,31 +106,11 @@ const KNOWN_EXTENSIONLESS_FILES = [
 ]
 
 /**
- * Silently skip files we do not analyse instead of aborting the whole upload,
- * but record them so the client can tell the user what was left out.
+ * Accept all project files. Analysis decides what it can inspect; rejecting
+ * common assets/binaries at upload time blocks real projects unnecessarily.
  */
-const fileFilter = (req, file, cb) => {
-  const ext = path.extname(file.originalname).toLowerCase()
-  const base = path.basename(file.originalname)
-  const lowerBase = base.toLowerCase()
-  const isArchive = file.mimetype.includes('archive') || file.mimetype.includes('zip')
-  const isConfigFile = base.startsWith('.') && ALLOWED_EXTENSIONS.includes(base)
-  const isKnownFile = KNOWN_EXTENSIONLESS_FILES.includes(lowerBase)
-  // Dot files such as .env or .gitignore have no extension either
-  const isDotFile = base.startsWith('.') && base.length > 1 && !base.includes(' ')
-
-  if (
-    ALLOWED_EXTENSIONS.includes(ext) ||
-    isArchive ||
-    isConfigFile ||
-    isKnownFile ||
-    isDotFile
-  ) {
-    return cb(null, true)
-  }
-  req.skippedFiles = req.skippedFiles || []
-  req.skippedFiles.push(file.originalname)
-  cb(null, false)
+const fileFilter = (_req, _file, cb) => {
+  cb(null, true)
 }
 
 /**
