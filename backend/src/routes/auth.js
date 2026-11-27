@@ -133,7 +133,7 @@ export function authRoutes(db, requireAuth, auditLog) {
   })
 
   // Set a new password with a reset token.
-  router.post('/reset-password', async (req, res, next) => {
+  router.post('/reset-password', resetLimit, async (req, res, next) => {
     try {
       const { token, password } = req.body
       if (!password || password.length < 8) {

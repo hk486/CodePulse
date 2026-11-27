@@ -445,20 +445,6 @@
   color: var(--auth-muted);
   font-size: 13px;
 }
-.auth-demo-hint {
-  margin-top: 16px;
-  padding: 10px 12px;
-  border: 1px solid var(--auth-border);
-  border-radius: 8px;
-  text-align: center;
-  color: var(--auth-faint);
-  font-size: 12.5px;
-}
-.auth-demo-hint strong {
-  color: var(--auth-text);
-  font-weight: 500;
-  font-family: "IBM Plex Mono", ui-monospace, monospace;
-}
 .auth-back {
   display: flex;
   justify-content: center;

@@ -321,26 +321,6 @@ export class Database {
     `)
 
     console.log(chalk.green('✓ Database initialized'))
-
-    // Seed a demo user so authentication works out of the box
-    await this.seedDemoUser()
-  }
-
-  async seedDemoUser() {
-    const existing = await this.get('SELECT * FROM users WHERE email = ?', ['demo@codepulse.com'])
-    if (existing) return
-
-    const salt = crypto.randomBytes(16).toString('hex')
-    const hash = crypto.scryptSync('demo123', salt, 64).toString('hex')
-    const now = new Date().toISOString()
-
-    await this.run(
-      `INSERT INTO users (id, username, email, password, fullName, role, createdAt)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      ['demo-user-001', 'demo', 'demo@codepulse.com', `${salt}:${hash}`, 'Demo User', 'user', now]
-    )
-
-    console.log(chalk.green('✓ Demo user seeded: demo@codepulse.com / demo123'))
   }
 
   async close() {

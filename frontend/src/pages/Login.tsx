@@ -45,9 +45,6 @@ export function Login() {
       {error && <AuthError>{error}</AuthError>}
       <AuthPrimaryButton loading={loading}>{loading ? 'Signing in...' : 'Sign In'}</AuthPrimaryButton>
     </form>
-    <p className="auth-demo-hint">
-      Try the demo account: <strong>demo@codepulse.com</strong> / <strong>demo123</strong>
-    </p>
     <AuthFooter>New to CodePulse? <Link to="/register">Create an account</Link></AuthFooter>
   </AuthFormContainer></AuthLayout>
 }

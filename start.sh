@@ -101,10 +101,8 @@ cat <<'EOF'
   🔌  API        http://localhost:5000/api
   ❤️  Health     http://localhost:5000/api/health
 
-  👤  Demo login  demo@codepulse.com / demo123
-
   📁  How to use
-     1. Sign in (or create an account)
+     1. Create an account or sign in
      2. Projects → New Project → give it a name
      3. Open the project card and use "Choose Folder"
      4. Click "Upload N files"

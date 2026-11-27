@@ -26,6 +26,10 @@ import { errorHandler } from './middleware/errorHandler.js'
 const app = express()
 const PORT = process.env.PORT || 5000
 
+// Behind a reverse proxy (Caddy/Nginx), trust the first hop so req.ip and
+// rate limiting see the real client address.
+app.set('trust proxy', 1)
+
 // Initialize database
 const db = new Database()
 await db.initialize()
