@@ -16,7 +16,7 @@ const STATE_LABELS: Record<string, string> = {
   analyzer_available: 'Analyzer available',
   analysis_completed: 'Analysed',
   partially_analyzed: 'Partly analysed',
-  unsupported: 'Not analysed',
+  unsupported: 'Generic only',
   failed: 'Failed',
 }
 
@@ -26,7 +26,7 @@ const STATE_STYLE: Record<string, string> = {
   analyzer_available: 'text-ink-2',
   supported: 'text-ink-2',
   detected: 'text-ink-2',
-  unsupported: 'text-ink-3',
+  unsupported: 'text-ink-2',
   failed: 'text-rose-600 dark:text-rose-400',
 }
 
@@ -100,7 +100,7 @@ export function CoveragePanel({ pipeline }: { pipeline: PipelineRecord }) {
           <p className="text-[13px] text-ink-2 mt-1">
             {analysed} language{analysed === 1 ? '' : 's'} analysed
             {partial > 0 ? `, ${partial} partly` : ''}
-            {unsupported > 0 ? `, ${unsupported} not analysed` : ''}
+            {unsupported > 0 ? `, ${unsupported} generic only` : ''}
             {failed > 0 ? `, ${failed} failed` : ''}
             {' · '}
             {analyzers.length} analyzer{analyzers.length === 1 ? '' : 's'} ran

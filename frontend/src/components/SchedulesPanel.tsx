@@ -42,8 +42,8 @@ export function SchedulesPanel() {
   const [unit, setUnit] = useState('days')
   const [saving, setSaving] = useState(false)
 
-  const load = useCallback(async () => {
-    setLoading(true)
+  const load = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true)
     try {
       const [scheduleResponse, projectResponse] = await Promise.all([
         apiFetch('/schedules'),
@@ -59,14 +59,18 @@ export function SchedulesPanel() {
         setProjects(Array.isArray(list) ? list : [])
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'The schedules could not be read.')
+      if (!silent) setError(err instanceof Error ? err.message : 'The schedules could not be read.')
     } finally {
-      setLoading(false)
+      if (!silent) setLoading(false)
     }
   }, [])
 
   useEffect(() => {
     void load()
+    const timer = window.setInterval(() => {
+      void load(true)
+    }, 30000)
+    return () => window.clearInterval(timer)
   }, [load])
 
   const create = async (e: React.FormEvent) => {

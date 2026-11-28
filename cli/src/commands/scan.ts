@@ -377,24 +377,17 @@ export async function scanCommand(
         if (language) filesPerLanguage[language] = (filesPerLanguage[language] || 0) + 1;
       }
 
-      // Only the analyzers that say they cover a language count towards
-      // it. The general pass over the whole project applies the rules
-      // that hold everywhere, so it does not make a language analysed.
-      const genericIds = new Set(
-        registry
-          .getAllAnalyzers()
-          .filter((analyzer) => analyzer.language === "generic")
-          .map((analyzer) => analyzer.id)
-      );
-
+      // Count files read by analyzers that cover a language. Generic
+      // analyzer provides baseline coverage for every language, so its
+      // reads count too.
       const readByLanguage = new Map<string, Set<string>>();
       for (const execution of analysisResult.analyzerExecutions || []) {
         if (execution.status !== AnalyzerStatus.COMPLETED) continue;
-        if (genericIds.has(execution.id)) continue;
         const covers = [execution.language, ...(execution.covers || [])];
         for (const file of execution.filesRead || []) {
           const language = languageOfPath(languageDetection, file);
-          if (!language || !covers.includes(language)) continue;
+          if (!language) continue;
+          if (execution.language !== "generic" && !covers.includes(language)) continue;
           if (!readByLanguage.has(language)) readByLanguage.set(language, new Set());
           readByLanguage.get(language)!.add(file);
         }

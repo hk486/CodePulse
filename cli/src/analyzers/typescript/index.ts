@@ -23,6 +23,7 @@ export class TypeScriptAnalyzer extends BaseRuleAnalyzer {
   readonly displayName = "TypeScript Analyzer";
   readonly facet = Facet.CODE;
   readonly extensions = ["ts", "tsx", "mts", "cts", "js", "jsx", "mjs", "cjs"];
+  readonly covers = ["javascript"];
   readonly commentPrefixes = ["//", "*", "/*"];
 
   readonly rules: Rule[] = [

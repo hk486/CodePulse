@@ -202,9 +202,6 @@ export class GenericSourceAnalyzer implements LanguageAnalyzer {
     const entries = await filesFor(context, [], context.projectPath);
 
     for (const entry of entries) {
-      // A dedicated analyzer covers these files better
-      if (DEDICATED_EXTENSIONS.has(entry.extension)) continue;
-
       let content: string;
       try {
         content = fs.readFileSync(entry.absolutePath, "utf-8");
@@ -215,7 +212,8 @@ export class GenericSourceAnalyzer implements LanguageAnalyzer {
 
       const lines = content.split("\n");
       const isCode = CODE_EXTENSIONS.has(entry.extension);
-      const rules = isCode ? [...UNIVERSAL_RULES, ...CODE_RULES] : UNIVERSAL_RULES;
+      const dedicated = DEDICATED_EXTENSIONS.has(entry.extension);
+      const rules = dedicated ? UNIVERSAL_RULES : isCode ? [...UNIVERSAL_RULES, ...CODE_RULES] : UNIVERSAL_RULES;
       const alreadyReported = new Set<string>();
 
       for (let i = 0; i < lines.length; i++) {

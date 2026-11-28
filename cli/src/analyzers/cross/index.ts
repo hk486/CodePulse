@@ -114,14 +114,21 @@ export class CrossProjectAnalyzer implements LanguageAnalyzer {
     context: ProjectContext
   ): Promise<{ relativePath: string; lines: string[]; extension: string }[]> {
     const out: { relativePath: string; lines: string[]; extension: string }[] = [];
+    let totalBytes = 0;
+    const maxFiles = 1500;
+    const maxTotalBytes = 30 * 1024 * 1024;
+    const maxFileBytes = 512 * 1024;
 
     for (const file of context.files || []) {
+      if (out.length >= maxFiles || totalBytes >= maxTotalBytes) break;
       const full = path.join(context.projectPath, file.path);
       try {
         const stat = fs.statSync(full);
-        if (!stat.isFile() || stat.size > 2 * 1024 * 1024) continue
+        if (!stat.isFile() || stat.size > maxFileBytes) continue;
+        if (totalBytes + stat.size > maxTotalBytes) continue;
         const content = fs.readFileSync(full, "utf-8");
-        if (content.includes("\u0000")) continue
+        if (content.includes("\u0000")) continue;
+        totalBytes += stat.size;
         out.push({
           relativePath: file.path,
           lines: content.split("\n"),
