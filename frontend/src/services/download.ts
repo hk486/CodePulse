@@ -30,7 +30,8 @@ export async function downloadFromApi(
   // The API is on another address from the page, so the link is followed
   // by the browser rather than fetched.
   const link = document.createElement('a')
-  link.href = new URL(url, API_URL).toString()
+  const base = API_URL.startsWith('http') ? API_URL : window.location.origin + (API_URL.startsWith('/') ? API_URL : `/${API_URL}`)
+  link.href = new URL(url, base).toString()
   link.rel = 'noopener'
   link.style.display = 'none'
   document.body.appendChild(link)
