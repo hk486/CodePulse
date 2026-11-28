@@ -9,6 +9,7 @@ import {
   ArrowLeft,
   Share2,
   Eye,
+  X,
 } from 'lucide-react'
 import { apiFetch, readError } from '../services/apiClient'
 import { downloadFromApi } from '../services/download'
@@ -54,6 +55,7 @@ export function AnalysisDetail() {
   const [findingsPage, setFindingsPage] = useState(0)
   const [comparingWith, setComparingWith] = useState<Analysis | null>(null)
   const [cancelling, setCancelling] = useState(false)
+  const [selectedFinding, setSelectedFinding] = useState<ApiFinding | null>(null)
 
   // A scan that has not finished yet is watched, not rendered. When it
   // settles the page loads the result.
@@ -637,7 +639,13 @@ export function AnalysisDetail() {
                     <span className="badge badge-info">{finding.confidence}</span>
                   </td>
                   <td className="text-right">
-                    <button className="btn-ghost text-[13px] p-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedFinding((analysis.findings || []).find((f: ApiFinding) => (f.id || '') === finding.id) || null)}
+                      className="btn-ghost text-[13px] p-1.5"
+                      title="View finding details"
+                      aria-label="View finding details"
+                    >
                       <Eye className="w-3 h-3 text-ink-3 group-hover:text-ink-2 dark:group-hover:text-ink-2" />
                     </button>
                   </td>
@@ -763,6 +771,59 @@ export function AnalysisDetail() {
                 </div>
               )
             })}
+          </div>
+        </div>
+      )}
+
+      {selectedFinding && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/45" onClick={() => setSelectedFinding(null)}>
+          <div className="w-full max-w-3xl max-h-[85vh] overflow-auto rounded-2xl border border-[rgb(var(--glass-edge-strong))] bg-[rgb(var(--surface-card))] shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="flex items-start justify-between gap-4 p-5 border-b border-[rgb(var(--glass-edge-inset))]">
+              <div className="min-w-0">
+                <h3 className="text-[17px] font-semibold text-ink">{selectedFinding.title || 'Finding'}</h3>
+                <p className="text-[13px] text-ink-2 font-mono mt-1 break-all">
+                  {selectedFinding.location?.filePath || 'Unknown file'}
+                  {selectedFinding.location?.startLine ? `:${selectedFinding.location.startLine}` : ''}
+                </p>
+              </div>
+              <button type="button" className="btn-ghost p-1.5" onClick={() => setSelectedFinding(null)} aria-label="Close finding details">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="p-5 space-y-4 text-[14px]">
+              <div className="flex flex-wrap gap-2">
+                <span className="badge badge-info">{selectedFinding.severity || 'LOW'}</span>
+                <span className="badge badge-info">{humanise(selectedFinding.category || 'CODE_QUALITY')}</span>
+                <span className="badge badge-info">{selectedFinding.confidence || 'LOW'}</span>
+                {(selectedFinding as any).validation ? <span className="badge badge-info">{(selectedFinding as any).validation}</span> : null}
+                {selectedFinding.componentId ? <span className="badge badge-info">{selectedFinding.componentId}</span> : null}
+              </div>
+              {selectedFinding.description ? (
+                <div>
+                  <div className="text-[12px] font-medium text-ink-3 uppercase tracking-wide mb-1">Description</div>
+                  <p className="text-ink-2 whitespace-pre-wrap">{selectedFinding.description}</p>
+                </div>
+              ) : null}
+              {selectedFinding.suggestedAction ? (
+                <div>
+                  <div className="text-[12px] font-medium text-ink-3 uppercase tracking-wide mb-1">Suggested action</div>
+                  <p className="text-ink-2 whitespace-pre-wrap">{selectedFinding.suggestedAction}</p>
+                </div>
+              ) : null}
+              {(selectedFinding as any).evidence?.snippet ? (
+                <div>
+                  <div className="text-[12px] font-medium text-ink-3 uppercase tracking-wide mb-1">Evidence</div>
+                  <pre className="text-[12px] leading-relaxed font-mono p-3 rounded-lg bg-[rgb(var(--glass-fill-inset))] border border-[rgb(var(--glass-edge-inset))] overflow-x-auto whitespace-pre-wrap">{(selectedFinding as any).evidence.snippet}</pre>
+                </div>
+              ) : null}
+              <div className="grid grid-cols-2 gap-3 text-[13px] text-ink-2">
+                <div><span className="text-ink-3">Rule:</span> {selectedFinding.ruleId || '-'}</div>
+                <div><span className="text-ink-3">Tool:</span> {(selectedFinding as any).tool || '-'}</div>
+              </div>
+              {(selectedFinding as any).documentation ? (
+                <a href={(selectedFinding as any).documentation} target="_blank" rel="noopener noreferrer" className="text-[13px] text-accent hover:underline">Documentation</a>
+              ) : null}
+            </div>
           </div>
         </div>
       )}
