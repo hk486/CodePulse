@@ -111,9 +111,17 @@ export class ScheduleService {
     if (!candidate) return null
 
     // Move it on before the work starts, so a long scan cannot make it
-    // run again while it is still running.
+    // run again while it is still running. If the server was down and
+    // missed intervals, jump to the next future slot instead of catching
+    // up one interval at a time.
     const intervalMs = candidate.every * (UNITS[candidate.unit] || UNITS.days)
-    const nextRunAt = new Date(new Date(candidate.nextRunAt).getTime() + intervalMs).toISOString()
+    const nowMs = new Date(now).getTime()
+    let nextMs = new Date(candidate.nextRunAt).getTime() + intervalMs
+    if (nextMs <= nowMs) {
+      const missed = Math.floor((nowMs - nextMs) / intervalMs) + 1
+      nextMs += missed * intervalMs
+    }
+    const nextRunAt = new Date(nextMs).toISOString()
 
     const result = await this.db.runChanges(
       `UPDATE schedules
